@@ -1,0 +1,208 @@
+<div class="pokemon-game-container">
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-overlay">
+    <div class="loading-card">
+      <div class="loading-spinner">
+        <div class="pokeball-spinner"></div>
+      </div>
+      <h3>Carregando Pokemon...</h3>
+      <p>Aguarde enquanto preparamos seu desafio!</p>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error()" class="error-overlay">
+    <div class="error-card">
+      <div class="error-icon">⚠️</div>
+      <h2>Ops! Algo deu errado</h2>
+      <p>{{ error() }}</p>
+      <button mat-raised-button color="primary" class="retry-button" (click)="resetGame()">
+        <mat-icon>refresh</mat-icon>
+        Tentar Novamente
+      </button>
+    </div>
+  </div>
+
+  <!-- Game Completed State -->
+  <div *ngIf="gameCompleted()" class="result-overlay">
+    <div class="result-card">
+      <div class="result-header">
+        <div class="trophy-icon">🏆</div>
+        <h2>Jogo Finalizado!</h2>
+        <p class="player-name">Parabéns, {{ playerName() }}!</p>
+      </div>
+      
+      <div class="result-stats">
+        <div class="stat-item">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+            <span class="stat-value">{{ correctAnswers() }}/{{ totalRounds() }}</span>
+            <span class="stat-label">Acertos</span>
+          </div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-content">
+            <span class="stat-value">{{ score() }}</span>
+            <span class="stat-label">Pontuação</span>
+          </div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="stat-icon">💡</div>
+          <div class="stat-content">
+            <span class="stat-value">{{ usedHints() }}</span>
+            <span class="stat-label">Dicas Usadas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="performance-message">
+        <div *ngIf="correctAnswers() >= 8" class="message excellent">
+          <h3>🎉 Excelente!</h3>
+          <p>Você é um verdadeiro mestre Pokemon!</p>
+        </div>
+        <div *ngIf="correctAnswers() >= 5 && correctAnswers() < 8" class="message good">
+          <h3>👏 Muito Bom!</h3>
+          <p>Você conhece bem os Pokemons!</p>
+        </div>
+        <div *ngIf="correctAnswers() < 5" class="message improve">
+          <h3>💪 Continue Praticando!</h3>
+          <p>Você vai melhorar com o tempo!</p>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button mat-raised-button color="primary" class="play-again-button" (click)="resetGame()">
+          <mat-icon>play_arrow</mat-icon>
+          Jogar Novamente
+        </button>
+        <button mat-stroked-button color="accent" class="home-button" (click)="goToStartScreen()">
+          <mat-icon>home</mat-icon>
+          Tela Inicial
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Game State -->
+  <div *ngIf="!loading() && !error() && !gameCompleted() && currentPokemon() && gameStarted()" class="game-container">
+    <div class="game-card">
+      <!-- Game Header -->
+      <div class="game-header">
+        <div class="game-title">
+          <h2>Quem é esse Pokemon?</h2>
+          <p class="player-welcome">Olá, {{ playerName() }}!</p>
+          <div class="round-indicator">
+            <span class="round-text">Rodada {{ currentRound() }} de {{ totalRounds() }}</span>
+            <div class="round-progress">
+              <div class="progress-fill" [style.width.%]="gameProgress().percentage"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pokemon Display -->
+      <div class="pokemon-display">
+        <div class="pokemon-frame">
+          <img 
+            [src]="currentPokemon()?.sprites?.front_default || ''" 
+            [alt]="'Pokemon'"
+            class="pokemon-image"
+            (error)="onImageError($event)">
+          <div class="pokemon-glow"></div>
+        </div>
+      </div>
+
+      <!-- Question Value Display -->
+      <div class="question-value-display">
+        <div class="value-chip">
+          <mat-icon>stars</mat-icon>
+          <span class="value-text">{{ currentQuestionValue() }} pontos</span>
+          <span class="value-label">Valor da Pergunta</span>
+        </div>
+      </div>
+
+      <!-- Game Stats -->
+      <div class="game-stats">
+        <div class="stat-chip">
+          <mat-icon>stars</mat-icon>
+          <span class="stat-text">{{ score() }}</span>
+          <span class="stat-label">Pontos</span>
+        </div>
+        
+        <div class="stat-chip">
+          <mat-icon>check_circle</mat-icon>
+          <span class="stat-text">{{ correctAnswers() }}</span>
+          <span class="stat-label">Acertos</span>
+        </div>
+        
+        <div class="stat-chip">
+          <mat-icon>help</mat-icon>
+          <span class="stat-text">{{ usedHints() }}</span>
+          <span class="stat-label">Dicas</span>
+        </div>
+      </div>
+
+      <!-- Current Hint Display -->
+      <div *ngIf="currentHint()" class="current-hint">
+        <div class="hint-bubble">
+          <mat-icon>lightbulb</mat-icon>
+          <span>{{ currentHint() }}</span>
+        </div>
+      </div>
+
+      <!-- Guess Form -->
+      <form [formGroup]="guessForm" (ngSubmit)="submitGuess()" class="guess-form">
+        <div class="form-field-container">
+          <mat-form-field appearance="outline" class="guess-input">
+            <mat-label>Digite o nome do Pokemon</mat-label>
+            <input 
+              matInput 
+              formControlName="guess" 
+              placeholder="Ex: pikachu"
+              autocomplete="off"
+              class="input-field">
+            <mat-icon matSuffix>search</mat-icon>
+            <mat-error *ngIf="guessForm.get('guess')?.hasError('required')">
+              Digite o nome do Pokemon
+            </mat-error>
+            <mat-error *ngIf="guessForm.get('guess')?.hasError('minlength')">
+              Nome muito curto
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit"
+            class="submit-button"
+            [disabled]="guessForm.invalid || loading()">
+            <mat-icon>send</mat-icon>
+            Enviar Resposta
+          </button>
+        </div>
+      </form>
+
+      <!-- Help Section -->
+      <div class="help-section">
+        <button 
+          mat-stroked-button 
+          color="accent"
+          class="hint-button"
+          (click)="useHint()"
+          [disabled]="loading()">
+          <mat-icon>lightbulb</mat-icon>
+          Pedir Dica (-5 pontos)
+        </button>
+        
+        <div class="hint-info">
+          <p>💡 Dica: Use as dicas quando estiver em dúvida, mas lembre-se que cada dica reduz o valor da pergunta em 5 pontos!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

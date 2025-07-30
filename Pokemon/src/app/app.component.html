@@ -1,0 +1,60 @@
+<div class="app-container">
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="pokemon-logo">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu" class="logo-pokemon">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png" alt="Charizard" class="logo-pokemon">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" alt="Mewtwo" class="logo-pokemon">
+        </div>
+        <h1 class="app-title">Pokemon Game</h1>
+        <p class="app-subtitle">Quem é esse Pokemon?</p>
+      </div>
+      <div class="header-decoration">
+        <div class="pokeball-decoration"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="app-main">
+    <app-start-screen *ngIf="!gameStarted()"></app-start-screen>
+    <app-pokemon-game *ngIf="gameStarted()"></app-pokemon-game>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Pokemon Game</h3>
+        <p>Teste seus conhecimentos sobre Pokemon!</p>
+      </div>
+      <div class="footer-section">
+        <h4>Como Jogar</h4>
+        <ul>
+          <li>Adivinhe o nome do Pokemon</li>
+          <li>+20 pontos por acerto</li>
+          <li>-5 pontos por dica</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Tecnologias</h4>
+        <ul>
+          <li>Angular 17</li>
+          <li>NgRx</li>
+          <li>Angular Material</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>API</h4>
+        <p>Dados fornecidos por <a href="https://pokeapi.co/" target="_blank">PokeAPI</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Pokemon Game. Desenvolvido com ❤️ e Angular.</p>
+    </div>
+  </footer>
+</div>
+
+<router-outlet />
