@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="header-decoration">
-        <div class="pokeball-decoration"></div>
+        <img src="assets/Pokemon_psi.jpeg" alt="Pokemon PSI" class="pokemon-decoration">
       </div>
     </div>
     <div class="pokemon-collection">
@@ -34,11 +34,6 @@
 
   <!-- Main Content -->
   <main class="app-main">
-    <!-- Debug Info -->
-    <div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 1000;">
-      <div>gameStarted: {{ gameStarted() }}</div>
-    </div>
-
     <app-start-screen *ngIf="!gameStarted()"></app-start-screen>
     <app-pokemon-game *ngIf="gameStarted()"></app-pokemon-game>
   </main>
@@ -72,7 +67,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2024 Pokemon Game. Desenvolvido com ❤️ e Angular.</p>
+      <p>&copy; 2025 Pokemon Game. Desenvolvido com ❤️ e Angular.</p>
     </div>
   </footer>
   </div>

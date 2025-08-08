@@ -10,37 +10,39 @@
       <h1 class="game-title">Pokemon Game</h1>
       <p class="game-subtitle">Quem é esse Pokemon?</p>
       
-      <div class="game-description">
-        <p>🎮 Teste seus conhecimentos sobre Pokemon!</p>
-        <p>🎯 Adivinhe o nome do Pokemon pela imagem</p>
-        <p>⭐ Ganhe pontos por acertos</p>
-        <p>💡 Use dicas quando precisar</p>
+      <div class="game-features-simple">
+        <span class="feature-item">🎮 Teste seus conhecimentos</span>
+        <span class="feature-item">🎯 Adivinhe pela imagem</span>
+        <span class="feature-item">⭐ Ganhe pontos</span>
+        <span class="feature-item">💡 Use dicas</span>
       </div>
     </div>
 
     <div class="player-form-section">
-      <h2>Como devemos te chamar?</h2>
+      <div class="form-title">
+        <h2>Como devemos te chamar?</h2>
+      </div>
       <form [formGroup]="playerForm" (ngSubmit)="startGame()" class="player-form">
-        <mat-form-field appearance="outline" class="name-input">
-          <mat-label>Seu nome</mat-label>
-          <input 
-            matInput 
-            formControlName="playerName" 
-            placeholder="Digite seu nome aqui"
-            autocomplete="off"
-            maxlength="20"
-            class="name-field">
-          <mat-icon matSuffix>person</mat-icon>
-          <mat-error *ngIf="playerForm.get('playerName')?.hasError('required')">
+        <app-primary-input
+          formControlName="playerName"
+          label="Seu nome"
+          placeholder="Digite seu nome aqui"
+          inputName="playerName"
+          type="text">
+          <mat-icon>person</mat-icon>
+        </app-primary-input>
+
+        <div class="form-errors" *ngIf="playerForm.get('playerName')?.invalid && playerForm.get('playerName')?.touched">
+          <p *ngIf="playerForm.get('playerName')?.hasError('required')" class="error-message">
             Digite seu nome
-          </mat-error>
-          <mat-error *ngIf="playerForm.get('playerName')?.hasError('minlength')">
+          </p>
+          <p *ngIf="playerForm.get('playerName')?.hasError('minlength')" class="error-message">
             Nome deve ter pelo menos 2 caracteres
-          </mat-error>
-          <mat-error *ngIf="playerForm.get('playerName')?.hasError('maxlength')">
+          </p>
+          <p *ngIf="playerForm.get('playerName')?.hasError('maxlength')" class="error-message">
             Nome deve ter no máximo 20 caracteres
-          </mat-error>
-        </mat-form-field>
+          </p>
+        </div>
 
         <div class="form-actions">
           <button 
@@ -49,7 +51,14 @@
             type="submit"
             class="start-button"
             [disabled]="playerForm.invalid">
-            <mat-icon>sports_esports</mat-icon>
+            <svg class="pokeball-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" fill="#FF5350"/>
+              <path d="M12 2C17.523 2 22 6.477 22 12H14.5C14.5 10.619 13.381 9.5 12 9.5C10.619 9.5 9.5 10.619 9.5 12H2C2 6.477 6.477 2 12 2Z" fill="#FF5350"/>
+              <path d="M12 22C6.477 22 2 17.523 2 12H9.5C9.5 13.381 10.619 14.5 12 14.5C13.381 14.5 14.5 13.381 14.5 12H22C22 17.523 17.523 22 12 22Z" fill="#FFFFFF"/>
+              <circle cx="12" cy="12" r="2" fill="#333333"/>
+              <circle cx="12" cy="12" r="1" fill="#FFFFFF"/>
+              <path d="M2 12H22" stroke="#333333" stroke-width="2"/>
+            </svg>
             Começar Jogo
           </button>
         </div>
@@ -60,34 +69,74 @@
       <h3>📋 Regras do Jogo</h3>
       <div class="rules-grid">
         <div class="rule-item">
-          <div class="rule-icon">🎯</div>
-          <div class="rule-content">
-            <h4>Objetivo</h4>
-            <p>Adivinhe o nome do Pokemon pela imagem</p>
+          <div class="rule-card-inner">
+            <div class="rule-card-front">
+              <div class="rule-header">
+                <div class="rule-icon">🎯</div>
+                <h4>Objetivo</h4>
+              </div>
+            </div>
+            <div class="rule-card-back">
+              <div class="rule-description">
+                <div class="rule-icon-small">🎯</div>
+                <h4>Objetivo</h4>
+                <p>Adivinhe o nome do Pokemon pela imagem</p>
+              </div>
+            </div>
           </div>
         </div>
         
         <div class="rule-item">
-          <div class="rule-icon">⭐</div>
-          <div class="rule-content">
-            <h4>Pontuação</h4>
-            <p>20 pontos por acerto sem dica</p>
+          <div class="rule-card-inner">
+            <div class="rule-card-front">
+              <div class="rule-header">
+                <div class="rule-icon">⭐</div>
+                <h4>Pontuação</h4>
+              </div>
+            </div>
+            <div class="rule-card-back">
+              <div class="rule-description">
+                <div class="rule-icon-small">⭐</div>
+                <h4>Pontuação</h4>
+                <p>20 pontos por acerto sem dica</p>
+              </div>
+            </div>
           </div>
         </div>
         
         <div class="rule-item">
-          <div class="rule-icon">💡</div>
-          <div class="rule-content">
-            <h4>Dicas</h4>
-            <p>Cada dica reduz 5 pontos da pergunta</p>
+          <div class="rule-card-inner">
+            <div class="rule-card-front">
+              <div class="rule-header">
+                <div class="rule-icon">💡</div>
+                <h4>Dicas</h4>
+              </div>
+            </div>
+            <div class="rule-card-back">
+              <div class="rule-description">
+                <div class="rule-icon-small">💡</div>
+                <h4>Dicas</h4>
+                <p>Cada dica reduz 5 pontos da pergunta</p>
+              </div>
+            </div>
           </div>
         </div>
         
         <div class="rule-item">
-          <div class="rule-icon">🔄</div>
-          <div class="rule-content">
-            <h4>Duração</h4>
-            <p>10 rodadas por jogo</p>
+          <div class="rule-card-inner">
+            <div class="rule-card-front">
+              <div class="rule-header">
+                <div class="rule-icon">🔄</div>
+                <h4>Duração</h4>
+              </div>
+            </div>
+            <div class="rule-card-back">
+              <div class="rule-description">
+                <div class="rule-icon-small">🔄</div>
+                <h4>Duração</h4>
+                <p>10 rodadas por jogo</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -95,13 +144,21 @@
 
     <div class="ranking-section">
       <button 
-        mat-stroked-button 
+        mat-raised-button 
         color="accent"
         class="ranking-button"
+        title="Ver ranking dos melhores treinadores Pokemon"
         (click)="viewRanking()">
-        <mat-icon>leaderboard</mat-icon>
+        <svg class="pokeball-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="11" fill="#f8f9fa" stroke="#333" stroke-width="1"/>
+          <path d="M2 12h20" stroke="#333" stroke-width="2"/>
+          <path d="M12 2C6.5 2 2 6.5 2 12h20c0-5.5-4.5-10-10-10z" fill="#e74c3c"/>
+          <path d="M12 22c5.5 0 10-4.5 10-10H2c0 5.5 4.5 10 10 10z" fill="#f8f9fa"/>
+          <circle cx="12" cy="12" r="3" fill="#333" stroke="#f8f9fa" stroke-width="2"/>
+          <circle cx="12" cy="12" r="1.5" fill="#f8f9fa"/>
+        </svg>
         Ver Ranking
       </button>
     </div>
   </div>
-</div> 
+</div>

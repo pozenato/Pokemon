@@ -22,13 +22,7 @@ export class AppComponent {
   constructor() {
     // Subscribe to game state
     this.store.select(PokemonSelectors.selectGameStarted).subscribe(started => {
-      console.log('AppComponent - gameStarted mudou para:', started);
       this.gameStarted.set(started);
-    });
-
-    // Debug: verificar estado inicial
-    this.store.select(PokemonSelectors.selectGameState).subscribe(state => {
-      console.log('AppComponent - Estado completo:', state);
     });
   }
 }

@@ -1,0 +1,16 @@
+<div class="input-wrapper">
+    <div class="input-content">
+        <input
+            [id]="inputName"
+            [value]="value"
+            [type]="type"
+            [placeholder]="placeholder"
+            (input)="onInput($event)"
+            (blur)="onBlur()"
+            (focus)="onFocus()" />
+        <label [for]="inputName" class="floating-label" [class.active]="isActive">{{ label }}</label>
+        <div class="icon">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>

@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import * as PokemonActions from '../store/actions/pokemon.actions';
+import { PrimaryInputComponent } from './primary-input.component';
 
 @Component({
   selector: 'app-start-screen',
@@ -18,10 +17,9 @@ import * as PokemonActions from '../store/actions/pokemon.actions';
     ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    PrimaryInputComponent
   ],
   templateUrl: './start-screen.component.html',
   styleUrls: ['./start-screen.component.scss']
@@ -40,20 +38,11 @@ export class StartScreenComponent {
   }
 
   startGame() {
-    console.log('Botão clicado!');
-    console.log('Form válido:', this.playerForm.valid);
-    console.log('Valor do nome:', this.playerForm.get('playerName')?.value);
-    
     if (this.playerForm.valid) {
       const playerName = this.playerForm.get('playerName')?.value;
-      console.log('Dispatching startGameWithPlayer com nome:', playerName);
       this.store.dispatch(PokemonActions.startGameWithPlayer({ playerName }));
     } else {
-      console.log('Form inválido, mostrando erro');
-      this.snackBar.open('Por favor, digite seu nome (2-20 caracteres)', 'Fechar', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
+      this.playerForm.markAllAsTouched();
     }
   }
 

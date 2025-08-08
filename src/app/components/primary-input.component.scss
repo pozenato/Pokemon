@@ -1,0 +1,86 @@
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto 30px;
+
+  .input-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input {
+      width: 100%;
+      padding: 25px 50px 10px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 20px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      background: white;
+      transition: all 0.3s ease;
+      outline: none;
+      box-sizing: border-box;
+
+      &::placeholder {
+        color: transparent;
+      }
+
+      &:focus {
+        border: 2px solid transparent;
+        background: linear-gradient(white, white) padding-box,
+                   linear-gradient(45deg, #4a90e2, #357abd) border-box;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+      }
+
+      &:hover:not(:focus) {
+        border-color: #bbb;
+      }
+    }
+
+    .floating-label {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #999;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      background: white;
+      padding: 0 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      &.active {
+        top: -8px;
+        transform: translateY(-50%);
+        font-size: 0.9rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, #4a90e2, #357abd);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 1px;
+      }
+    }
+
+    .icon {
+      position: absolute;
+      right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      pointer-events: none;
+      font-size: 1.5rem;
+      transition: color 0.3s ease;
+    }
+
+    // When input is focused, change icon color to match gradient
+    input:focus + .floating-label + .icon {
+      color: #4a90e2;
+    }
+  }
+}
