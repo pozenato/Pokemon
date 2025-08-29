@@ -4,6 +4,19 @@ export interface Pokemon {
   sprites: {
     front_default: string;
     front_shiny: string;
+    other?: {
+      'official-artwork'?: {
+        front_default: string;
+        front_shiny: string;
+      };
+      home?: {
+        front_default: string;
+        front_shiny: string;
+      };
+      dream_world?: {
+        front_default: string;
+      };
+    };
   };
   types: Array<{
     type: {

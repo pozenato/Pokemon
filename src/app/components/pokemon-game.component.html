@@ -107,10 +107,11 @@
       <div class="pokemon-display">
         <div class="pokemon-frame">
           <img 
-            [src]="currentPokemon()?.sprites?.front_default || ''" 
+            [src]="getBestPokemonImage(currentPokemon())" 
             [alt]="'Pokemon'"
             class="pokemon-image"
-            (error)="onImageError($event)">
+            (error)="onImageError($event)"
+            loading="lazy">
           <div class="pokemon-glow"></div>
         </div>
       </div>
@@ -145,11 +146,17 @@
         </div>
       </div>
 
-      <!-- Current Hint Display -->
-      <div *ngIf="currentHint()" class="current-hint">
-        <div class="hint-bubble">
-          <mat-icon>lightbulb</mat-icon>
-          <span>{{ currentHint() }}</span>
+      <!-- Lista de dicas usadas -->
+      <div class="hints-list" *ngIf="usedHintsList().length > 0">
+        <h4>🔍 Dicas Utilizadas:</h4>
+        <div class="hints-container">
+          <div 
+            *ngFor="let hint of usedHintsList(); let i = index" 
+            class="hint-item"
+            [attr.data-hint-number]="i + 1">
+            <div class="hint-number">{{ i + 1 }}</div>
+            <div class="hint-text">{{ hint }}</div>
+          </div>
         </div>
       </div>
 
@@ -161,7 +168,7 @@
             <input 
               matInput 
               formControlName="guess" 
-              placeholder="Ex: pikachu"
+              [placeholder]="getPlaceholderText()"
               autocomplete="off"
               class="input-field">
             <mat-icon matSuffix>search</mat-icon>
@@ -194,13 +201,16 @@
           color="accent"
           class="hint-button"
           (click)="useHint()"
-          [disabled]="loading()">
+          [disabled]="loading() || !canUseHint()">
           <mat-icon>lightbulb</mat-icon>
-          Pedir Dica (-5 pontos)
+          <span *ngIf="canUseHint()">Pedir Dica (-5 pontos)</span>
+          <span *ngIf="!canUseHint()">Limite de dicas atingido</span>
         </button>
         
         <div class="hint-info">
           <p>💡 Dica: Use as dicas quando estiver em dúvida, mas lembre-se que cada dica reduz o valor da pergunta em 5 pontos!</p>
+          <p *ngIf="canUseHint()" class="hints-remaining">🎯 Você pode usar mais {{ hintsRemaining() }} dica(s) nesta rodada.</p>
+          <p *ngIf="!canUseHint()" class="hints-exhausted">🚫 Você já usou todas as {{ maxHints }} dicas disponíveis!</p>
         </div>
       </div>
     </div>
